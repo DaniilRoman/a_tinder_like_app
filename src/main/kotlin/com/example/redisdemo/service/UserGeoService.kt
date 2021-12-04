@@ -21,4 +21,9 @@ class UserGeoService(private val stringRedisTemplate: RedisTemplate<String, Stri
         val geoOps: GeoOperations<String, String> = stringRedisTemplate.opsForGeo()
         geoOps.add(USER_GEO_POINT, Point(x, y), userId)
     }
+
+    fun addUserPoints(userPoints: Map<String, Point>) {
+        val geoOps: GeoOperations<String, String> = stringRedisTemplate.opsForGeo()
+        geoOps.add(USER_GEO_POINT, userPoints)
+    }
 }
