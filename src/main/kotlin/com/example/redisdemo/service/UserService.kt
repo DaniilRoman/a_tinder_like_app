@@ -1,7 +1,7 @@
 package com.example.redisdemo.service
 
 import com.example.redisdemo.model.Constants
-import com.example.redisdemo.model.NotFoundException
+import com.example.redisdemo.model.UserNotFoundException
 import com.example.redisdemo.model.User
 import org.springframework.data.redis.core.HashOperations
 import org.springframework.data.redis.core.RedisTemplate
@@ -16,6 +16,6 @@ class UserService(private val userRedisTemplate: RedisTemplate<String, User>) {
 
     fun getUser(userId: String): User {
         val userOps: HashOperations<String, String, User> = userRedisTemplate.opsForHash()
-        return userOps.get(Constants.USERS, userId)?: throw NotFoundException("Not found user by $userId")
+        return userOps.get(Constants.USERS, userId)?: throw UserNotFoundException(userId)
     }
 }

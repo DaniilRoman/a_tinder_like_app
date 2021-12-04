@@ -3,6 +3,7 @@ package com.example.redisdemo.service
 import com.example.redisdemo.model.Constants
 import com.example.redisdemo.model.User
 import com.example.redisdemo.model.UserLike
+import com.example.redisdemo.model.UserNotFoundException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -47,9 +48,9 @@ class UserLikeService(private val userLikeRedisTemplate: RedisTemplate<String, U
 
     private fun updateUserLike(userLike: UserLike) {
         val userOps: HashOperations<String, String, User> = userLikeRedisTemplate.opsForHash()
-        val fromUser = (userOps.get(Constants.USERS, userLike.fromUserId)?: IllegalArgumentException()) as User
+        val fromUser = userOps.get(Constants.USERS, userLike.fromUserId)?: throw UserNotFoundException(userLike.fromUserId)
         fromUser.fromLikes.add(userLike)
-        val toUser = (userOps.get(Constants.USERS, userLike.toUserId)?: IllegalArgumentException()) as User
+        val toUser = userOps.get(Constants.USERS, userLike.toUserId)?: throw UserNotFoundException(userLike.toUserId)
         toUser.fromLikes.add(userLike)
         userOps.putAll(Constants.USERS, mapOf(userLike.fromUserId to fromUser, userLike.toUserId to toUser))
     }
