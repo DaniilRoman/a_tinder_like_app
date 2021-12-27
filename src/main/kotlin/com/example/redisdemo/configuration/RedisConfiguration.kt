@@ -43,10 +43,10 @@ class RedisConfiguration(val pushListener: PushListener) {
     fun messageListener() = MessageListenerAdapter(pushListener)
 
     @Bean
-    fun redisContainer(jedisConnectionFactory: JedisConnectionFactory, messageListener: MessageListenerAdapter): RedisMessageListenerContainer {
+    fun redisContainer(jedisConnectionFactory: JedisConnectionFactory, messageListener: MessageListenerAdapter, pushTopic: ChannelTopic): RedisMessageListenerContainer {
         val container = RedisMessageListenerContainer()
         container.setConnectionFactory(jedisConnectionFactory)
-        container.addMessageListener(messageListener, pushTopic())
+        container.addMessageListener(messageListener, pushTopic)
         return container
     }
 }
