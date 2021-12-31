@@ -5,7 +5,6 @@ import com.example.redisdemo.model.Constants.USER_GEO_STREAM_NAME
 import com.example.redisdemo.model.UserPoint
 import io.lettuce.core.RedisBusyException
 import mu.KotlinLogging
-import org.springframework.data.geo.Point
 import org.springframework.data.redis.connection.stream.ObjectRecord
 import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.data.redis.stream.StreamListener
@@ -19,20 +18,8 @@ class UserPointsConsumer(
     private val userGeoService: UserGeoService
 ) : StreamListener<String, ObjectRecord<String, UserPoint>> {
 
-    private val userPoints = mutableMapOf<String, Point>()
-    private val SWAP_THRESHOLD = 100
-
     override fun onMessage(record: ObjectRecord<String, UserPoint>) {
-        swapToPointsStoreIfNeeded(userPoints)
-        val userPoint = record.value
-        userPoints[userPoint.id] = userPoint.point
-    }
-
-    private fun swapToPointsStoreIfNeeded(userPoints: MutableMap<String, Point>) {
-        if (userPoints.size == SWAP_THRESHOLD) {
-            userGeoService.addUserPoints(userPoints)
-            userPoints.clear()
-        }
+        userGeoService.addUserPoint(record.value)
     }
 }
 
