@@ -12,7 +12,7 @@ class UsersActivityService(private val stringRedisTemplate: RedisTemplate<String
         return hyperLogLogOps.size(Constants.TODAY_ACTIVITIES)
     }
 
-    fun userDayActivity(userId: String): Long {
+    fun userOpenApp(userId: String): Long {
         val hyperLogLogOps: HyperLogLogOperations<String, String> = stringRedisTemplate.opsForHyperLogLog()
         return hyperLogLogOps.add(Constants.TODAY_ACTIVITIES, userId)
     }
