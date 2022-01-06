@@ -15,3 +15,7 @@ Example of using `hyper log log` you can find [here](./src/main/kotlin/com/examp
 The whole scheme of using method examples looks like that:
 
 ![](./schema.png)
+
+Made for the article:
+<br />RUS: https://habr.com/ru/post/599345/
+<br />EN: https://medium.com/@daniil_roman/designing-an-application-with-redis-as-a-data-store-what-why-d02e685ee2b8
